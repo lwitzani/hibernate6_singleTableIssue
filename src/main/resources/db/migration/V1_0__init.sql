@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS person
 CREATE TABLE IF NOT EXISTS body_part
 (
     id            BIGINT NOT NULL PRIMARY KEY,
-    person_id     BIGINT NOT NULL REFERENCES person,
+    person_id     BIGINT REFERENCES person,
     name          TEXT   NOT NULL,
     discriminator TEXT   NOT NULL
 );

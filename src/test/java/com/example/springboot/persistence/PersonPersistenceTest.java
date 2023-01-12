@@ -21,33 +21,38 @@ public class PersonPersistenceTest {
     }
 
     @Test
-    void shouldUseSQLUpdateToChangeThePersonName() {
+    void shouldUseSQLUpdateToChangeThePersonName() { // this is the test that will fail with hibernate 6
         Person person = new Person();
         person.setName("initialName");
 
         Person savedPerson = personRepository.save(person);
         person = personRepository.findById(person.getId()).get();
         assertEquals("initialName", savedPerson.getName());
-        assertEquals(person.getId(), savedPerson.getId());
+        assertEquals(person.getId(), savedPerson.getId()); // <-- the person that has been persisted is the same as the one being fetched
 
         person.setName("changedName");
         savedPerson = personRepository.save(person);
+
         person = personRepository.findById(person.getId()).get();
         assertEquals("changedName", savedPerson.getName());
-        assertEquals(person.getId(), savedPerson.getId());
+        assertEquals(person.getId(), savedPerson.getId());  // <-- this line fails: the person that has been persisted is a new one.
+        // the expected behaviour is that the existing person is updated
 
         assertEquals(1, personRepository.count());
     }
 
 
     @Test
-    void shouldBeAbleToSavePersonWithBodyParts() {
+    void shouldBeAbleToSavePersonWithBodyParts() { // can be ignored! this is just a test to make sure that this works
         Person person = new Person();
         person.setName("initialName");
-        person.getBodyParts().add(new Arm("left arm", person));
-        person.getBodyParts().add(new Leg("left leg", person));
+        person.getLegs().add(new Leg("left leg", person));
+        person.getLegs().add(new Leg("right leg", person));
         Person savedPerson = personRepository.save(person);
-        assertNotNull(savedPerson.getBodyParts());
-        assertEquals(2, savedPerson.getBodyParts().size());
+
+        person = personRepository.findByIdJoinFetchLegs(person.getId());
+        assertEquals(person.getId(), savedPerson.getId());
+        assertNotNull(person.getLegs());
+        assertEquals(2, person.getLegs().size());
     }
 }

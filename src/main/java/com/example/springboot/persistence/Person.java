@@ -1,11 +1,10 @@
 package com.example.springboot.persistence;
 
 import com.example.springboot.persistence.base.BaseEntity;
-import com.example.springboot.persistence.base.BodyPart;
+import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,10 +13,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "person")
 public class Person extends BaseEntity {
-    private Set<BodyPart> bodyParts = new HashSet<>();
+    private Set<Leg> legs = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-    public Set<BodyPart> getBodyParts() {
-        return bodyParts;
+    public Set<Leg> getLegs() {
+        return legs;
     }
 }
