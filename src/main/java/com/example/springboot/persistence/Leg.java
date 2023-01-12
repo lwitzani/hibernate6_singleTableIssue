@@ -1,13 +1,13 @@
 package com.example.springboot.persistence;
 
 import com.example.springboot.persistence.base.BodyPart;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 @Entity
 @Setter

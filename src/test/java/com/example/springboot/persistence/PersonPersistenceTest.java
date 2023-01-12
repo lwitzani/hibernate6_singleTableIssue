@@ -35,8 +35,8 @@ public class PersonPersistenceTest {
 
         person = personRepository.findById(person.getId()).get();
         assertEquals("changedName", savedPerson.getName());
-        assertEquals(person.getId(), savedPerson.getId());  // <-- this line fails: the person that has been persisted is a new one.
-        // the expected behaviour is that the existing person is updated
+        assertEquals(person.getId(), savedPerson.getId());  // <-- this line fails in hibernate 6: the person that has been persisted is a new one.
+        // the expected behaviour is that the existing person is updated. This is the case in hibernate 5.
 
         assertEquals(1, personRepository.count());
     }
