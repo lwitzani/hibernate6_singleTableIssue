@@ -1,7 +1,7 @@
 #Possible hibernate 6 bug
 
 
-##Requesites
+##Requisites
 
 - entity ("Person") exists that has a field which is a set of other entities ("Set\<Leg>")
 - these other entities are derived from an abstract super class ("Leg extends BodyPart")
@@ -25,13 +25,16 @@
   - the body_part table is joined via left outer join
   - the where clause here only consists of "where person.id = \<id>"
 - the entity is correctly found by the select statement so afterwards an update statement follows
-- result: one entity (the changed one)
-- 
+- result: one entity exists (the changed one)
+
+![](src/main/resources/images/hibernate5.png)
+
 ##Observations in Hibernate 6.1.6.Final
 
 - when the second save is called (after changing the name) there will be a different select statement now
   - the body_part table is joined via left join now (not outer)
   - the critical change here is that the where clause now suddenly consists of "where body_part.discriminator = 'LegBodyPart' and person.id = \<id>"
 - although the entity exists, it is not found by the select statement so afterwards an insert statement follows which creates a second Person with a new id
-- result: two entities (the original one and the changed one)
+- result: two entities exist (the original one and the changed one)
+
 ![](src/main/resources/images/hibernate6.png)
