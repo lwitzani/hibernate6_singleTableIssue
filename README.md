@@ -1,7 +1,7 @@
-#Possible hibernate 6 bug
+# Possible hibernate 6 bug
 
 
-##Requisites
+## Requisites
 
 - entity ("Person") exists that has a field which is a set of other entities ("Set\<Leg>")
 - these other entities are derived from an abstract super class ("Leg extends BodyPart")
@@ -9,7 +9,7 @@
 
 ![](src/main/resources/images/uml.png)
 
-##Reproduction
+## Reproduction
 
 - execute the test PersonPersistenceTest.shouldUseSQLUpdateToChangeThePersonName
 - the test basically
@@ -19,7 +19,7 @@
   - saves the changed Person again
 
 
-##Observations in Hibernate 5.6.14.Final
+## Observations in Hibernate 5.6.14.Final
 
 - when the second save is called (after changing the name) there will be a select statement which is used to check if the entity already exists
   - the body_part table is joined via left outer join
@@ -29,7 +29,7 @@
 
 ![](src/main/resources/images/hibernate5.png)
 
-##Observations in Hibernate 6.1.6.Final
+## Observations in Hibernate 6.1.6.Final
 
 - when the second save is called (after changing the name) there will be a different select statement now
   - the body_part table is joined via left join now (not outer)
@@ -38,3 +38,11 @@
 - result: two entities exist (the original one and the changed one)
 
 ![](src/main/resources/images/hibernate6.png)
+
+
+
+# Summary
+
+- after updating spring boot to 3.0.1 which also updates hibernate to 6.1.6.Final it does not seem to be possible to update an entity with this constellation
+- the main difference is that an additional and unexpected where clause is added which prevents finding the correct entity in this case
+- the result is that a new entity is persisted instead of the existing one being updated
